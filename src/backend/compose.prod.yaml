@@ -1,0 +1,25 @@
+services:
+  app:
+    image: inf24dw2g35/m1_nodejs:latest
+    depends_on:
+      mysql: # Garante que o MySQL esteja pronto antes do Node.js
+        condition: service_healthy
+    ports:
+      - "3000:3000"
+
+  mysql:
+    environment:
+      MYSQL_DATABASE: plataforma_consultas # Nome do banco de dados a ser criad0
+      MYSQL_ROOT_PASSWORD: secret
+    image: inf24dw2g35/m1_mysql:latest
+    volumes:
+      - mysql-data-PMC:/var/lib/mysql # Volume persistente para dados do banco
+    ports:
+      - "3306:3306"
+    healthcheck:
+      test: ["CMD", "mysqladmin" ,"ping", "-h", "localhost"]
+      timeout: 20s
+      retries: 10
+
+volumes:
+  mysql-data-PMC:

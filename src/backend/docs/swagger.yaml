@@ -1,0 +1,536 @@
+openapi: 3.0.3
+info:
+  title: API de Agendamento Médico
+  version: 1.0.0
+  description: |
+    Esta API permite gerenciar pacientes, médicos e consultas. 
+    O login é feito via GitHub OAuth. Os acessos são controlados por tipos de usuário: `paciente`, `medico`, e `adm`.
+
+servers:
+  - url: http://localhost:3000
+
+security:
+  - cookieAuth: []
+
+tags:
+  - name: Autenticação
+    description: Rotas de login e logout
+  - name: Pacientes
+  - name: Médicos
+  - name: Consultas
+
+paths:
+  /github:
+    get:
+      tags:
+        - Autenticação
+      summary: Iniciar login com GitHub
+      responses:
+        '302':
+          description: Redireciona para o GitHub OAuth
+
+  /github/callback:
+    get:
+      tags:
+        - Autenticação
+      summary: Callback do GitHub OAuth
+      responses:
+        '302':
+          description: Redireciona para a rota /autenticado após login
+
+  /autenticado:
+    get:
+      tags:
+        - Autenticação
+      summary: Verifica se o usuário está autenticado
+      responses:
+        '200':
+          description: Retorna informações do usuário autenticado
+        '401':
+          description: Não autenticado
+
+  /logout:
+    get:
+      tags:
+        - Autenticação
+      summary: Realiza logout e destrói a sessão
+      responses:
+        '302':
+          description: Redireciona para a página inicial
+  
+  /pacientes:
+    get:
+      summary: Lista todos os pacientes
+      description: Permite que um administrador visualize todos os pacientes
+      operationId: listarPacientes
+      tags:
+        - Pacientes
+      security:
+        - cookieAuth: []
+      responses:
+        '200':
+          description: Lista de pacientes
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Paciente'
+    post:
+      summary: Cria um novo paciente
+      description: Permite que um administrador crie um novo paciente
+      operationId: criarPaciente
+      tags:
+        - Pacientes
+      security:
+        - cookieAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Paciente'
+      responses:
+        '201':
+          description: Paciente criado com sucesso
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Paciente'
+
+  /pacientes/{id}:
+    get:
+      summary: Recupera um paciente pelo ID
+      description: Permite que o paciente, médico ou administrador visualizem as informações de um paciente, desde que o ID corresponda
+      operationId: buscarPacientePorId
+      tags:
+        - Pacientes
+      parameters:
+        - name: id
+          in: path
+          required: true
+          description: ID do paciente
+          schema:
+            type: integer
+      security:
+        - cookieAuth: []
+      responses:
+        '200':
+          description: Detalhes do paciente
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Paciente'
+        '403':
+          description: Acesso negado para pacientes com ID diferente
+        '404':
+          description: Paciente não encontrado
+
+    put:
+      summary: Atualiza um paciente pelo ID
+      description: Permite que um administrador atualize os dados de um paciente
+      operationId: atualizarPaciente
+      tags:
+        - Pacientes
+      parameters:
+        - name: id
+          in: path
+          required: true
+          description: ID do paciente
+          schema:
+            type: integer
+      security:
+        - cookieAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Paciente'
+      responses:
+        '200':
+          description: Paciente atualizado com sucesso
+
+    delete:
+      summary: Remove um paciente pelo ID
+      description: Permite que um administrador remova um paciente
+      operationId: removerPaciente
+      tags:
+        - Pacientes
+      parameters:
+        - name: id
+          in: path
+          required: true
+          description: ID do paciente
+          schema:
+            type: integer
+      security:
+        - cookieAuth: []
+      responses:
+        '200':
+          description: Paciente removido com sucesso
+
+  /pacientes/{id}/consultas:
+    get:
+      summary: Lista as consultas de um paciente pelo ID
+      description: Permite que o paciente veja suas próprias consultas
+      operationId: consultasPorPaciente
+      tags:
+        - Pacientes
+      parameters:
+        - name: id
+          in: path
+          required: true
+          description: ID do paciente
+          schema:
+            type: integer
+      security:
+        - cookieAuth: []
+      responses:
+        '200':
+          description: Lista de consultas do paciente
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Consulta'
+        '403':
+          description: Acesso negado para pacientes que não são os donos da consulta
+        '404':
+          description: Nenhuma consulta encontrada para o paciente
+  
+  /medicos:
+    get:
+      summary: Lista todos os médicos
+      description: Apenas administradores podem listar todos os médicos
+      operationId: listarMedicos
+      tags:
+        - Médicos
+      security:
+        - cookieAuth: []
+      responses:
+        '200':
+          description: Lista de médicos
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Medico'
+
+    post:
+      summary: Cria um novo médico
+      description: Apenas administradores podem criar médicos
+      operationId: criarMedico
+      tags:
+        - Médicos
+      security:
+        - cookieAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Medico'
+      responses:
+        '201':
+          description: Médico criado com sucesso
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Medico'
+
+  /medicos/{id}:
+    get:
+      summary: Recupera um médico pelo ID
+      description: Médicos só podem ver seu próprio perfil; admins podem acessar qualquer um
+      operationId: buscarMedicoPorId
+      tags:
+        - Médicos
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+          description: ID do médico
+      security:
+        - cookieAuth: []
+      responses:
+        '200':
+          description: Detalhes do médico
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Medico'
+        '403':
+          description: Acesso negado para médicos com ID diferente
+        '404':
+          description: Médico não encontrado
+
+    put:
+      summary: Atualiza um médico pelo ID
+      description: Apenas administradores podem atualizar médicos
+      operationId: atualizarMedico
+      tags:
+        - Médicos
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+          description: ID do médico
+      security:
+        - cookieAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Medico'
+      responses:
+        '200':
+          description: Médico atualizado com sucesso
+
+    delete:
+      summary: Remove um médico pelo ID
+      description: Apenas administradores podem remover médicos
+      operationId: removerMedico
+      tags:
+        - Médicos
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+          description: ID do médico
+      security:
+        - cookieAuth: []
+      responses:
+        '200':
+          description: Médico removido com sucesso
+  
+  /consultas:
+    get:
+      summary: Lista todas as consultas
+      tags:
+        - Consultas
+      security:
+        - cookieAuth: []
+      responses:
+        '200':
+          description: Lista de consultas
+        '401':
+          description: Não autenticado
+        '403':
+          description: Acesso negado
+
+    post:
+      summary: Cria uma nova consulta
+      tags:
+        - Consultas
+      security:
+        - cookieAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                paciente_id:
+                  type: integer
+                medico_id:
+                  type: integer
+                data_hora:
+                  type: string
+                status:
+                  type: string
+      responses:
+        '201':
+          description: Consulta criada com sucesso
+        '401':
+          description: Não autenticado
+        '403':
+          description: Acesso negado
+
+  /consultas/{id}:
+    get:
+      summary: Busca uma consulta por ID
+      tags:
+        - Consultas
+      security:
+        - cookieAuth: []
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: Dados da consulta
+        '401':
+          description: Não autenticado
+        '403':
+          description: Acesso negado (ex; paciente não é dono da consulta)
+        '404':
+          description: Consulta não encontrada
+
+    put:
+      summary: Atualiza uma consulta existente
+      tags:
+        - Consultas
+      security:
+        - cookieAuth: []
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                paciente_id:
+                  type: integer
+                medico_id:
+                  type: integer
+                data_hora:
+                  type: string
+                status:
+                  type: string
+      responses:
+        '200':
+          description: Consulta atualizada com sucesso
+        '401':
+          description: Não autenticado
+        '403':
+          description: Acesso negado
+
+    delete:
+      summary: Exclui uma consulta
+      tags:
+        - Consultas
+      security:
+        - cookieAuth: []
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: Consulta excluída com sucesso
+        '401':
+          description: Não autenticado
+        '403':
+          description: Acesso negado
+  
+components:
+
+  securitySchemes:
+    cookieAuth:
+      type: apiKey
+      in: cookie
+      name: connect.sid
+      
+  schemas:
+    Paciente:
+      type: object
+      properties:
+        id:
+          type: integer
+          description: ID do paciente
+        nome:
+          type: string
+          description: Nome do paciente
+        email:
+          type: string
+          description: Email do paciente
+        senha:
+          type: string
+          description: Senha do paciente
+        data_nascimento:
+          type: string
+          format: date
+          description: Data de nascimento do paciente
+        telefone:
+          type: string
+          description: Número de telefone do paciente
+
+    Medico:
+      type: object
+      properties:
+        id:
+          type: integer
+          description: ID do médico
+        nome:
+          type: string
+          description: Nome do médico
+        email:
+          type: string
+          description: Email do médico
+        senha:
+          type: string
+          description: Senha do médico
+        especialidade:
+          type: string
+          description: Especialidade do médico
+        telefone:
+          type: string
+          description: Número de telefone do médico
+
+    Consulta:
+      type: object
+      properties:
+        id:
+          type: integer
+          description: ID da consulta
+        paciente_id:
+          type: integer
+          description: ID do paciente
+        medico_id:
+          type: integer
+          description: ID do médico
+        data_hora:
+          type: string
+          format: date-time
+          description: Data e hora da consulta
+        status:
+          type: string
+          description: Status da consulta (Agendada, Concluída, Cancelada)
+          
+    Usuario:
+      type: object
+      properties:
+        id:
+          type: integer
+          description: ID do usuário (paciente ou médico)
+        tipo:
+          type: string
+          enum:
+            - paciente
+            - medico
+            - adm
+          description: Tipo de usuário
+        email:
+          type: string
+          description: Email do usuário
+
+
+
+
+
+
+
+
+

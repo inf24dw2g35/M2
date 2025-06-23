@@ -1,0 +1,467 @@
+{
+	"info": {
+		"_postman_id": "c45c85d9-6eef-470b-a43e-510b64a43ac2",
+		"name": "M1 dw2",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "38629835"
+	},
+	"item": [
+		{
+			"name": "pacientes",
+			"item": [
+				{
+					"name": "/pacientes",
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "GET",
+						"header": [
+							{
+								"key": "Cookie",
+								"value": "{{autorizationcookie}}",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{baseURL}}/pacientes",
+							"host": [
+								"{{baseURL}}"
+							],
+							"path": [
+								"pacientes"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "/pacientes",
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "POST",
+						"header": [
+							{
+								"key": "Cookie",
+								"value": "{{autorizationcookie}}",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"nome\": \"adalberto\",\r\n  \"email\": \"adalberto@gmail.com\",\r\n  \"senha\": \"abalba123\",\r\n  \"data_nascimento\": \"2025-05-11\",\r\n  \"telefone\": \"934953969\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{baseURL}}/pacientes",
+							"host": [
+								"{{baseURL}}"
+							],
+							"path": [
+								"pacientes"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "/pacientes/:id",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Cookie",
+								"value": "{{autorizationcookie}}",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{baseURL}}/pacientes/1",
+							"host": [
+								"{{baseURL}}"
+							],
+							"path": [
+								"pacientes",
+								"1"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "/pacientes/:id",
+					"request": {
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Cookie",
+								"value": "{{autorizationcookie}}",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"nome\": \"zeca\",\r\n  \"email\": \"zequinha@gmail.com\",\r\n  \"senha\": \"zecapagodinho\",\r\n  \"data_nascimento\": \"2025-05-11\",\r\n  \"telefone\": \"934953969\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{baseURL}}/pacientes/31",
+							"host": [
+								"{{baseURL}}"
+							],
+							"path": [
+								"pacientes",
+								"31"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "/pacientes/:id",
+					"request": {
+						"method": "DELETE",
+						"header": [
+							{
+								"key": "Cookie",
+								"value": "{{autorizationcookie}}",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{baseURL}}/pacientes/31",
+							"host": [
+								"{{baseURL}}"
+							],
+							"path": [
+								"pacientes",
+								"31"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "/pacientes/:id/consultas",
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "GET",
+						"header": [
+							{
+								"key": "Cookie",
+								"value": "{{autorizationcookie}}",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{baseURL}}/pacientes/1/consultas",
+							"host": [
+								"{{baseURL}}"
+							],
+							"path": [
+								"pacientes",
+								"1",
+								"consultas"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "consultas",
+			"item": [
+				{
+					"name": "/consultas",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Cookie",
+								"value": "{{autorizationcookie}}",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{baseURL}}/consultas",
+							"host": [
+								"{{baseURL}}"
+							],
+							"path": [
+								"consultas"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "/consultas",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Cookie",
+								"value": "{{autorizationcookie}}",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"paciente_id\": 2,\r\n  \"medico_id\": 2,\r\n  \"data_hora\": \"2025-04-10 14:30:00\",\r\n  \"status\": \"Finalizada\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{baseURL}}/consultas",
+							"host": [
+								"{{baseURL}}"
+							],
+							"path": [
+								"consultas"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "/consultas/:id",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Cookie",
+								"value": "{{autorizationcookie}}",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{baseURL}}/consultas/32",
+							"host": [
+								"{{baseURL}}"
+							],
+							"path": [
+								"consultas",
+								"32"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "/consultas/:id",
+					"request": {
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Cookie",
+								"value": "{{autorizationcookie}}",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"paciente_id\": 1,\r\n  \"medico_id\": 2,\r\n  \"data_hora\": \"2025-04-10 14:30:00\",\r\n  \"status\": \"Agendada\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{baseURL}}/consultas/32",
+							"host": [
+								"{{baseURL}}"
+							],
+							"path": [
+								"consultas",
+								"32"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "/consultas/:id",
+					"request": {
+						"method": "DELETE",
+						"header": [
+							{
+								"key": "Cookie",
+								"value": "{{autorizationcookie}}",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{baseURL}}/consultas/32",
+							"host": [
+								"{{baseURL}}"
+							],
+							"path": [
+								"consultas",
+								"32"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "medicos",
+			"item": [
+				{
+					"name": "/medicos",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Cookie",
+								"value": "{{autorizationcookie}}",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{baseURL}}/medicos",
+							"host": [
+								"{{baseURL}}"
+							],
+							"path": [
+								"medicos"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "/medicos",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Cookie",
+								"value": "{{autorizationcookie}}",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"nome\": \"Dr. monica\",\r\n  \"email\": \"monica@gmail.com\",\r\n  \"senha\": \"momozinha\",\r\n  \"especialidade\": \"pediatra\",\r\n  \"telefone\": \"934696972\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{baseURL}}/medicos",
+							"host": [
+								"{{baseURL}}"
+							],
+							"path": [
+								"medicos"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "/medicos/:id",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Cookie",
+								"value": "{{autorizationcookie}}",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{baseURL}}/medicos/1",
+							"host": [
+								"{{baseURL}}"
+							],
+							"path": [
+								"medicos",
+								"1"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "/medicos/:id",
+					"request": {
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Cookie",
+								"value": "{{autorizationcookie}}",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"nome\": \"Dr. bruna\",\r\n  \"email\": \"bruna@gmail.com\",\r\n  \"senha\": \"brubru\",\r\n  \"especialidade\": \"oftalmologista\",\r\n  \"telefone\": \"934696972\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{baseURL}}/medicos/31",
+							"host": [
+								"{{baseURL}}"
+							],
+							"path": [
+								"medicos",
+								"31"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "/medicos/:id",
+					"request": {
+						"method": "DELETE",
+						"header": [
+							{
+								"key": "Cookie",
+								"value": "{{autorizationcookie}}",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{baseURL}}/medicos/1",
+							"host": [
+								"{{baseURL}}"
+							],
+							"path": [
+								"medicos",
+								"1"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		}
+	]
+}

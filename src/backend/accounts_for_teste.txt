@@ -1,0 +1,5 @@
+emails github:
+    admboladao99@gmail.com | nome: admin | sobrenome: boladao | senha:boladao.123! "um pequeno erro tornou diferente das outras duas" 
+    pacienteboladao99@gmail.com | nome: paciente | sobrenome: boladao
+    medicoboladao99@gmail.com
+senha: boladao.123!

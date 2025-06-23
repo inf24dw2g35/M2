@@ -1,0 +1,9 @@
+FROM mysql:8.0
+
+COPY ./sql/*.sql /docker-entrypoint-initdb.d/
+
+ENV MYSQL_ROOT_PASSWORD=secret
+ENV MYSQL_DATABASE=plataforma_consultas
+ENV MYSQL_BIND_ADDRESS=0.0.0.0
+
+EXPOSE 3306
